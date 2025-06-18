@@ -4,7 +4,6 @@ This is a full-stack web application that allows users to:
 - Send real-time messages via WebSocket
 - Draw on a shared canvas (whiteboard) that syncs with all connected users
 
----
 
 ## Features
 
@@ -14,12 +13,11 @@ This is a full-stack web application that allows users to:
 - Vanilla JavaScript frontend 
 - WebSocket communication via STOMP protocol
 
----
 
 ## Technologies Used
 
 - **Backend:** Java, Spring Boot, WebSocket, STOMP
-- **Frontend:** HTML5, Canvas API, JavaScript
+- **Frontend:** JavaScript, Canvas API, HTML, CSS 
 
----
+
 
