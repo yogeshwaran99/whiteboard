@@ -13,6 +13,7 @@ let formInput, messageInput;
 let canvas, ctx;
 let drawing = false;
 let lastX = 0, lastY = 0;
+let currentUsername = "Anonymous";
 
 client.onConnect = (frame) => {
 	setConnected(true);
@@ -26,6 +27,18 @@ client.onConnect = (frame) => {
 	client.subscribe(topicDraw(), (message) => {
 		const data = JSON.parse(message.body);
 		drawLine(data.x1, data.y1, data.x2, data.y2);
+	});
+
+	client.subscribe(`/topic/room/${localStorage.getItem("roomId")}/status`, (message) => {
+		if (message.body === "ROOM_CLOSED") {
+			alert("Room has been closed by the creator.");
+			disconnect();
+			localStorage.removeItem("roomId");
+			document.getElementById("currentRoomId").innerText = "";
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			chatsTable.innerHTML = "";
+			document.getElementById("deleteButton").style.display = "none";
+		}
 	});
 };
 
@@ -74,7 +87,6 @@ function sendMessage() {
 	}
 }
 
-
 function showChatMessage(message) {
 	const row = document.createElement("tr");
 	const cell = document.createElement("td");
@@ -82,7 +94,6 @@ function showChatMessage(message) {
 	row.appendChild(cell);
 	chatsTable.appendChild(row);
 }
-
 
 function drawLine(x1, y1, x2, y2) {
 	ctx.beginPath();
@@ -154,14 +165,23 @@ const backendURL = "http://localhost:8080/api/rooms";
 function createRoom() {
 	const name = document.getElementById("roomName").value;
 
-	fetch(`${backendURL}?name=${encodeURIComponent(name)}`, {
-		method: "POST"
+	fetch(backendURL, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		credentials: "include",
+		body: JSON.stringify({ name })
 	})
-		.then(res => res.json())
+		.then(res => {
+			if (!res.ok) throw new Error("Room creation failed");
+			return res.json();
+		})
 		.then(data => {
 			localStorage.setItem("roomId", data.id);
 			document.getElementById("roomCreatedMsg").innerText = `Room Created: ${data.id}`;
 			document.getElementById("currentRoomId").innerText = data.name;
+			checkRoomOwnership(data);
 		})
 		.catch(err => {
 			console.error("Create room failed:", err);
@@ -171,7 +191,7 @@ function createRoom() {
 function joinRoom() {
 	const id = document.getElementById("roomId").value;
 
-	fetch(`${backendURL}/${id}`)
+	fetch(`${backendURL}/${id}`, { credentials: "include" })
 		.then(res => {
 			if (!res.ok) throw new Error("Room not found");
 			return res.json();
@@ -180,27 +200,50 @@ function joinRoom() {
 			localStorage.setItem("roomId", data.id);
 			document.getElementById("roomJoinMsg").innerText = `Joined Room: ${data.name}`;
 			document.getElementById("currentRoomId").innerText = data.name;
+			checkRoomOwnership(data);
 		})
 		.catch(err => {
 			document.getElementById("roomJoinMsg").innerText = "Invalid Room ID!";
 			console.error(err);
 		});
 }
+
 function deleteRoom() {
-	const id = document.getElementById("roomIdToDelete").value;
+	const id = localStorage.getItem("roomId");
+
+	if (!id) {
+		alert("No room selected.");
+		return;
+	}
 
 	fetch(`${backendURL}/${id}`, {
-		method: "DELETE"
+		method: "DELETE",
+		credentials: "include"
 	})
 		.then(res => {
 			if (!res.ok) throw new Error("Delete failed");
+
+
 			document.getElementById("roomDeleteMsg").innerText = "Room deleted successfully!";
+			localStorage.removeItem("roomId");
+			document.getElementById("currentRoomId").innerText = "";
+			document.getElementById("deleteButton").style.display = "none";
+
+
+			disconnect();
+
+
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			chatsTable.innerHTML = "";
+
 		})
 		.catch(err => {
 			console.error(err);
 			document.getElementById("roomDeleteMsg").innerText = "Failed to delete room!";
 		});
 }
+
+
 function handleLogout() {
 	fetch("/logout", {
 		method: "POST",
@@ -221,7 +264,7 @@ function handleLogout() {
 
 document.getElementById("logoutBtn").addEventListener("click", handleLogout);
 
-let currentUsername = "Anonymous";
+
 fetch("/me", { credentials: "include" })
 	.then(res => {
 		if (!res.ok) throw new Error("Failed to get user");
@@ -234,3 +277,25 @@ fetch("/me", { credentials: "include" })
 	.catch(err => {
 		console.error("Could not fetch username", err);
 	});
+
+
+function checkRoomOwnership(roomData) {
+	if (roomData.creator && roomData.creator.username === currentUsername) {
+		document.getElementById("deleteButton").style.display = "block";
+	} else {
+		document.getElementById("deleteButton").style.display = "none";
+	}
+}
+
+
+function leaveRoom() {
+	disconnect();
+	localStorage.removeItem("roomId");
+	document.getElementById("currentRoomId").innerText = "";
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	chatsTable.innerHTML = "";
+	document.getElementById("deleteButton").style.display = "none";
+	alert("You have left the room.");
+}
+
+document.getElementById("leaveRoomBtn").addEventListener("click", leaveRoom);

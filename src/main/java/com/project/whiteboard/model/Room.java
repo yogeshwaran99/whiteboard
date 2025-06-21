@@ -2,6 +2,7 @@ package com.project.whiteboard.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 import java.util.UUID;
@@ -18,7 +19,11 @@ public class Room {
 
 	private String name;
 
-	public static Room create(String name) {
-		return Room.builder().id(UUID.randomUUID()).name(name).build();
+	@ManyToOne
+	private User creator;
+
+	public static Room create(String name, User creator) {
+		return Room.builder().id(UUID.randomUUID()).name(name).creator(creator).build();
 	}
+
 }

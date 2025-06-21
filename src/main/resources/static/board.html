@@ -32,9 +32,12 @@
 				<strong>Current Room:</strong> <span id="currentRoomId">None</span>
 			</p>
 		</div>
-		<input type="text" id="roomIdToDelete" placeholder="Room ID to delete" />
-		<button onclick="deleteRoom()">Delete Room</button>
+
+		<button id="deleteButton" style="display: none;"
+			onclick="deleteRoom()">Delete Room</button>
 		<p id="roomDeleteMsg"></p>
+
+		<button id="leaveRoomBtn">Leave Room</button>
 
 		<div class="row">
 			<form id="form">
