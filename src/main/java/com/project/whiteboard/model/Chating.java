@@ -1,3 +1,3 @@
 package com.project.whiteboard.model;
 
-public record Chating(String content) {}
+public record Chating(String sender, String content) {}

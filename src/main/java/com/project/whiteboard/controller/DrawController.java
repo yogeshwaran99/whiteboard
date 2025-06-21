@@ -11,8 +11,7 @@ public class DrawController {
 
 	@MessageMapping("/room/{roomId}/draw")
 	@SendTo("/topic/room/{roomId}/draw")
-    public DrawingData handleDraw(DrawingData data) {
-        return data;
-    }
+	public DrawingData handleDraw(DrawingData data) {
+		return data;
+	}
 }
-

@@ -11,18 +11,18 @@ import com.project.whiteboard.repository.Roomrepo;
 @Service
 public class Roomservice {
 
-    private final Roomrepo roomRepository;
+	private final Roomrepo roomRepository;
 
-    public Roomservice(Roomrepo roomRepository) {
-        this.roomRepository = roomRepository;
-    }
+	public Roomservice(Roomrepo roomRepository) {
+		this.roomRepository = roomRepository;
+	}
 
-    public Room createRoom(String name) {
-        Room room = Room.create(name);
-        return roomRepository.save(room);
-    }
+	public Room createRoom(String name) {
+		Room room = Room.create(name);
+		return roomRepository.save(room);
+	}
 
-    public Optional<Room> getRoomById(UUID id) {
-        return roomRepository.findById(id);
-    }
+	public Optional<Room> getRoomById(UUID id) {
+		return roomRepository.findById(id);
+	}
 }

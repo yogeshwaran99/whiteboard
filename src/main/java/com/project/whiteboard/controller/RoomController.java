@@ -14,29 +14,28 @@ import com.project.whiteboard.service.Roomservice;
 @CrossOrigin(origins = "*")
 public class RoomController {
 	private Roomrepo roomRepository;
-    private final Roomservice roomService;
+	private final Roomservice roomService;
 
-    public RoomController(Roomservice roomService, Roomrepo roomRepository) {
-        this.roomService = roomService;
-        this.roomRepository = roomRepository;
-    }
+	public RoomController(Roomservice roomService, Roomrepo roomRepository) {
+		this.roomService = roomService;
+		this.roomRepository = roomRepository;
+	}
 
-    @PostMapping
-    public ResponseEntity<Room> createRoom(@RequestParam String name) {
-        Room room = roomService.createRoom(name);
-        return ResponseEntity.ok(room);
-    }
+	@PostMapping
+	public ResponseEntity<Room> createRoom(@RequestParam String name) {
+		Room room = roomService.createRoom(name);
+		return ResponseEntity.ok(room);
+	}
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Room> getRoom(@PathVariable UUID id) {
-        return roomService.getRoomById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-    @DeleteMapping("/api/rooms/{id}")
-    public ResponseEntity<?> deleteRoom(@PathVariable UUID id) {
-        roomRepository.deleteById(id);
-        return ResponseEntity.ok().build();
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<Room> getRoom(@PathVariable UUID id) {
+		return roomService.getRoomById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+	}
+
+	@DeleteMapping("/api/rooms/{id}")
+	public ResponseEntity<?> deleteRoom(@PathVariable UUID id) {
+		roomRepository.deleteById(id);
+		return ResponseEntity.ok().build();
+	}
 
 }
