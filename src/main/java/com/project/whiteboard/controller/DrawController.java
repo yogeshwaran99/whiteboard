@@ -9,8 +9,8 @@ import com.project.whiteboard.model.DrawingData;
 @Controller
 public class DrawController {
 
-    @MessageMapping("/draw")
-    @SendTo("/topic/draw")
+	@MessageMapping("/room/{roomId}/draw")
+	@SendTo("/topic/room/{roomId}/draw")
     public DrawingData handleDraw(DrawingData data) {
         return data;
     }

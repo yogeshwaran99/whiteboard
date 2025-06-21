@@ -10,7 +10,27 @@
 <body>
   <div>
     <h1>Whiteboard</h1>
+  <div>
+    <input type="text" id="roomName" placeholder="Enter room name" required>
+    <button onclick="createRoom()">Create Room</button>
+    <p id="roomCreatedMsg"></p>
+  </div>
 
+  
+  <div>
+    <input type="text" id="roomId" placeholder="Enter room ID">
+    <button onclick="joinRoom()">Join Room</button>
+    <p id="roomJoinMsg"></p>
+  </div>
+
+  
+  <div>
+    <p><strong>Current Room:</strong> <span id="currentRoomId">None</span></p>
+  </div>
+  <input type="text" id="roomIdToDelete" placeholder="Room ID to delete" />
+<button onclick="deleteRoom()">Delete Room</button>
+<p id="roomDeleteMsg"></p>
+  
     <div class="row">
       <form id="form">
         <label for="connect">WebSocket connection:</label>

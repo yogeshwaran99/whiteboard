@@ -10,8 +10,8 @@ import com.project.whiteboard.model.*;
 
 @Controller
 public class ChatingController {
-  @MessageMapping("/message")
-  @SendTo("/topic/text")
+	@MessageMapping("/room/{roomId}/chat")
+	@SendTo("/topic/room/{roomId}/chat")
   public Chating chating(Message message) throws Exception {
     return new Chating(HtmlUtils.htmlEscape(message.content()) );
   }

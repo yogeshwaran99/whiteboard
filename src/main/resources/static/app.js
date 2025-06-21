@@ -1,7 +1,7 @@
-const topicChat = "/topic/text";
-const topicDraw = "/topic/draw";
-const destinationChat = "/app/message";
-const destinationDraw = "/app/draw";
+const topicChat = () => `/topic/room/${localStorage.getItem("roomId")}/chat`;
+const topicDraw = () => `/topic/room/${localStorage.getItem("roomId")}/draw`;
+const destinationChat = () => `/app/room/${localStorage.getItem("roomId")}/chat`;
+const destinationDraw = () => `/app/room/${localStorage.getItem("roomId")}/draw`;
 
 const client = new StompJs.Client({
   brokerURL: "ws://localhost:8080/whiteboard",
@@ -18,12 +18,12 @@ client.onConnect = (frame) => {
   setConnected(true);
   console.log("Connected: " + frame);
 
-  client.subscribe(topicChat, (messageFrame) => {
+  client.subscribe(topicChat(), (messageFrame) => {
     const message = JSON.parse(messageFrame.body).content;
     showChatMessage(message);
   });
 
-  client.subscribe(topicDraw, (message) => {
+  client.subscribe(topicDraw(), (message) => {
     const data = JSON.parse(message.body);
     drawLine(data.x1, data.y1, data.x2, data.y2);
   });
@@ -46,6 +46,11 @@ function setConnected(connected) {
 }
 
 function connect() {
+  const roomId = localStorage.getItem("roomId");
+  if (!roomId) {
+    alert("Please create or join a room first!");
+    return;
+  }
   client.activate();
 }
 
@@ -59,7 +64,7 @@ function sendMessage() {
   const text = messageInput.value;
   if (text.trim() !== "") {
     client.publish({
-      destination: destinationChat,
+      destination: destinationChat(),
       body: JSON.stringify({ content: text }),
     });
     messageInput.value = "";
@@ -82,7 +87,6 @@ function drawLine(x1, y1, x2, y2) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-
   buttonConnect = document.getElementById("connect");
   buttonDisconnect = document.getElementById("disconnect");
   buttonSend = document.getElementById("send");
@@ -109,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     drawLine(lastX, lastY, x, y);
 
     client.publish({
-      destination: destinationDraw,
+      destination: destinationDraw(),
       body: JSON.stringify({ x1: lastX, y1: lastY, x2: x, y2: y }),
     });
 
@@ -139,3 +143,56 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setConnected(false);
 });
+
+const backendURL = "http://localhost:8080/api/rooms";
+
+function createRoom() {
+  const name = document.getElementById("roomName").value;
+
+  fetch(`${backendURL}?name=${encodeURIComponent(name)}`, {
+    method: "POST"
+  })
+    .then(res => res.json())
+    .then(data => {
+      localStorage.setItem("roomId", data.id);
+      document.getElementById("roomCreatedMsg").innerText = `Room Created: ${data.id}`;
+      document.getElementById("currentRoomId").innerText = data.name;
+    })
+    .catch(err => {
+      console.error("Create room failed:", err);
+    });
+}
+
+function joinRoom() {
+  const id = document.getElementById("roomId").value;
+
+  fetch(`${backendURL}/${id}`)
+    .then(res => {
+      if (!res.ok) throw new Error("Room not found");
+      return res.json();
+    })
+    .then(data => {
+      localStorage.setItem("roomId", data.id);
+      document.getElementById("roomJoinMsg").innerText = `Joined Room: ${data.name}`;
+      document.getElementById("currentRoomId").innerText = data.name;
+    })
+    .catch(err => {
+      document.getElementById("roomJoinMsg").innerText = "Invalid Room ID!";
+      console.error(err);
+    });
+}
+function deleteRoom() {
+  const id = document.getElementById("roomIdToDelete").value;
+
+  fetch(`${backendURL}/${id}`, {
+    method: "DELETE"
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Delete failed");
+      document.getElementById("roomDeleteMsg").innerText = "Room deleted successfully!";
+    })
+    .catch(err => {
+      console.error(err);
+      document.getElementById("roomDeleteMsg").innerText = "Failed to delete room!";
+    });
+}
