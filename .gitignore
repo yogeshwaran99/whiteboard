@@ -10,7 +10,7 @@ buildNumber.properties
 .mvn/
 !.mvn/wrapper/maven-wrapper.jar
 !.mvn/wrapper/maven-wrapper.properties
-
+HELP.md
 ### Gradle ###
 .gradle/
 build/
