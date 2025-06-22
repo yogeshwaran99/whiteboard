@@ -2,6 +2,10 @@
 
 A full-stack web application for real-time collaboration through a shared whiteboard and chat system.
 
+## preview
+
+![preview](https://raw.githubusercontent.com/yogeshwaran99/whiteboard/main/assets/preview.png)
+
 ## Features
 
 - Synchronized whiteboard drawing using WebSockets

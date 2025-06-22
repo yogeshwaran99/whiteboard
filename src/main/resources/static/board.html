@@ -1,75 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-<title>Project Whiteboard</title>
-<link href="/main.css" rel="stylesheet" />
-<script
-	src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Whiteboard</title>
+	<link rel="stylesheet" href="main.css" />
+	<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
 </head>
 
 <body>
-	<div>
-		<h1>Whiteboard</h1>
-
-		<div>
-			<input type="text" id="roomName" placeholder="Enter room name"
-				required>
-			<button onclick="createRoom()">Create Room</button>
-			<p id="roomCreatedMsg"></p>
+	<h1 class="title">Whiteboard</h1>
+	<div class="main-container">
+		<div class="room-container">
+			<div class="form-container">
+				<div>
+					<input type="text" id="roomName" placeholder="Enter room name" required />
+					<button onclick="createRoom()">Create Room</button>
+					<p id="roomCreatedMsg"></p>
+					<input type="text" id="roomId" placeholder="Enter room ID" />
+					<button onclick="joinRoom()">Join Room</button>
+					<p id="roomJoinMsg"></p>
+				</div>
+			</div>
+			<div id="leaveRoom">
+				<p>Current Room: <span id="currentRoomId">None</span></p>
+				<button id="deleteButton" class="hidden" onclick="deleteRoom()">Delete Room</button>
+				<p id="roomDeleteMsg"></p>
+				<button id="leaveRoomBtn">Leave Room</button>
+				<button id="logoutBtn">Logout</button>
+			</div>
+			<div class="row">
+				<form id="form">
+					<label for="connect">WebSocket connection:</label>
+					<button id="connect" type="submit">Connect</button>
+					<button id="disconnect" type="submit" disabled>Disconnect</button>
+				</form>
+				<form>
+					<label for="message">Message:</label>
+					<input type="text" id="message" placeholder="Type a message..." />
+					<button id="send" type="submit">Send</button>
+				</form>
+			</div>
 		</div>
-
-
-		<div>
-			<input type="text" id="roomId" placeholder="Enter room ID">
-			<button onclick="joinRoom()">Join Room</button>
-			<p id="roomJoinMsg"></p>
-		</div>
-
-
-		<div>
-			<p>
-				<strong>Current Room:</strong> <span id="currentRoomId">None</span>
-			</p>
-		</div>
-
-		<button id="deleteButton" style="display: none;"
-			onclick="deleteRoom()">Delete Room</button>
-		<p id="roomDeleteMsg"></p>
-
-		<button id="leaveRoomBtn">Leave Room</button>
-
-		<div class="row">
-			<form id="form">
-				<label for="connect">WebSocket connection:</label>
-				<button id="connect" type="submit">Connect</button>
-				<button id="disconnect" type="submit" disabled>Disconnect</button>
-			</form>
-		</div>
-
-		<div class="row">
-			<form>
-				<label for="message">Message:</label> <input type="text"
-					id="message" placeholder="Type a message..." />
-				<button id="send" type="submit">Send</button>
-			</form>
-		</div>
-		<button id="logoutBtn">Logout</button>
 		<div id="conversation">
-			<table>
-				<thead>
-					<tr>
-						<th>Chats:</th>
-					</tr>
-				</thead>
-				<tbody id="chats"></tbody>
-			</table>
+			<h4>chats:</h4>
+			<div id="chats"></div>
 		</div>
 	</div>
-
-	<canvas id="whiteboard" width="600" height="400"
-		style="border: 1px solid black;"></canvas>
-
+	<canvas id="whiteboard" height="630" width="600"></canvas>
 	<script src="/app.js"></script>
 </body>
 

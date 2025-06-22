@@ -55,7 +55,7 @@ function setConnected(connected) {
 	buttonConnect.disabled = connected;
 	buttonDisconnect.disabled = !connected;
 	conversationDisplay.style.display = connected ? "block" : "none";
-	chatsTable.innerHTML = "";
+	chatOutput.innerHTML = "";
 }
 
 function connect() {
@@ -88,12 +88,11 @@ function sendMessage() {
 }
 
 function showChatMessage(message) {
-	const row = document.createElement("tr");
-	const cell = document.createElement("td");
-	cell.textContent = `${message.sender}: ${message.content}`;
-	row.appendChild(cell);
-	chatsTable.appendChild(row);
+	const msg = document.createElement("p");
+	msg.textContent = `${message.sender}: ${message.content}`;
+	chatOutput.appendChild(msg);
 }
+
 
 function drawLine(x1, y1, x2, y2) {
 	ctx.beginPath();
@@ -107,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	buttonDisconnect = document.getElementById("disconnect");
 	buttonSend = document.getElementById("send");
 	conversationDisplay = document.getElementById("conversation");
-	chatsTable = document.getElementById("chats");
+	chatOutput = document.getElementById("chats");
 	formInput = document.getElementById("form");
 	messageInput = document.getElementById("message");
 
@@ -139,7 +138,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	canvas.addEventListener("mouseup", () => drawing = false);
 	canvas.addEventListener("mouseout", () => drawing = false);
-
 	buttonConnect.addEventListener("click", (e) => {
 		connect();
 		e.preventDefault();
@@ -234,7 +232,7 @@ function deleteRoom() {
 
 
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			chatsTable.innerHTML = "";
+			chatOutput.innerHTML = "";
 
 		})
 		.catch(err => {
@@ -293,9 +291,10 @@ function leaveRoom() {
 	localStorage.removeItem("roomId");
 	document.getElementById("currentRoomId").innerText = "";
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	chatsTable.innerHTML = "";
+	chatOutput.innerHTML = "";
 	document.getElementById("deleteButton").style.display = "none";
 	alert("You have left the room.");
 }
 
 document.getElementById("leaveRoomBtn").addEventListener("click", leaveRoom);
+
