@@ -1,0 +1,76 @@
+### Maven ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+HELP.md
+.mvn/
+
+### Gradle ###
+.gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+**/out/
+
+### Logs ###
+*.log
+logs/
+log/
+*.log.*
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+### Eclipse / Spring Tool Suite (STS) ###
+.project
+.classpath
+.cproject
+.settings/
+.apt_generated/
+.factorypath
+.springBeans
+.sts4-cache/
+
+### NetBeans ###
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Vim ###
+*.swp
+*.swo
+*~
+.vim/
+.vimrc
+
+### OS Generated ###
+.DS_Store
+Thumbs.db
+
+### Test Reports ###
+surefire-reports/
+test-output/
+jacoco.exec
+coverage/
+
+### Temporary Files ###
+*.tmp
+*.bak
+*.old
+*.orig
+*.rej
+
