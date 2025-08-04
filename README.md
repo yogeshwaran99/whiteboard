@@ -81,12 +81,10 @@ cd whiteboard
 
 # Run the Spring Boot application
 ./mvnw spring-boot:run
-```
 
-#### The application will start at:
-
+# The application will start at:
 http://localhost:8080
-
+```
 
 
 ### Method 2: Run with Docker and Docker Compose
@@ -107,13 +105,10 @@ cd whiteboard
 
 # Build and run all services
 docker-compose up --build
-```
 
-#### Once containers are up, open in your browser:
-
+# The application will start at:
 http://localhost:8080
 
-```bash
 # Stop the App
 docker-compose down
 ```
