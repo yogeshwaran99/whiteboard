@@ -72,6 +72,7 @@ You can run this application in two ways:
 
 - **Java 21** (required) 
 - Maven  
+- PostgreSQL
 
 #### Steps
 
