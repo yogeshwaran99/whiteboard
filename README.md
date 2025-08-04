@@ -76,6 +76,9 @@ You can run this application in two ways:
 #### Steps
 
 ```bash
+# Clone the repository if not already
+git clone https://github.com/yogeshwaran99/whiteboard.git
+
 # Go into the project directory
 cd whiteboard
 
@@ -101,6 +104,8 @@ http://localhost:8080
 ```bash
 # Clone the repository if not already
 git clone https://github.com/yogeshwaran99/whiteboard.git
+
+# Go into the project directory
 cd whiteboard
 
 # Build and run all services
